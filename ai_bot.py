@@ -4,6 +4,9 @@ import webbrowser
 import os 
 import datetime
 import time 
+import pywhatkit as pk
+
+dict = {"sachin" : "+917478810262" , "aditya" : "+916205188890" , "pritam" : "+919801975893" , "papa" : "919431526395"}  
 
 # import streamlit as st
 # from audiorecorder import audiorecorder
@@ -17,7 +20,7 @@ import time
 #             f.write(audio.tobytes())
 #         st.audio(audio.tobytes(), format="audio/wav")
 
-speaker = pr.init()
+speaker = pr.init()   
 recongnizer = sr.Recognizer()
 mic = sr.Microphone()
 
@@ -132,16 +135,67 @@ if __name__ == "__main__":
             # talk("Here are the latest news headlines.")
             speaker.say("Here are the latest news headlines.")
             webbrowser.open("https://news.google.news.com")
+
         elif "name" in text:
             # talk("My name is bentai assistant.")
             speaker.say("My name is bentai assistant.")
+
         elif "time" in text:
             time = datetime.datetime.now().strftime("%H:%M:%S")
-            talk(f"souvik the time is {time}")
+            #talk(f"souvik the time is {time}")
             speaker.say(f"souvik the time is {time}")
+
+        
+        
+        elif "message" in text:
+            talk("To whom you want to send a message?")
+            speaker.say("to whom you want to send message")
+            
+            while True:
+                person = take_command()
+
+                
+                if person == "none":
+                    talk("I didn't catch that. Please say the contact name again.")
+                    continue
+
+                
+                if person in dict:
+                    number = dict[person]
+                    break   
+
+                
+                else:
+                    talk("repeat the name")
+                    continue
+
+            
+            #talk("What message do you want to send?")
+            speaker.say("What message do you want to send?")
+            
+            while True:
+                message = take_command()
+
+                if message == "none":
+                    talk("Please repeat your message.")
+                    continue
+                else:
+                    break
+            
+            pk.sendwhatmsg_instantly(number, message)
+            talk(f"Message sent to {person} successfully.")
+
+
+            
+
+            
+
+
+
        
         elif "quit" in text or "stop" in text or "exit" in text or "ruko" in text or "band" in text or "ruk ja" in text:
 
             talk("ok souvik, bye bye")
             speaker.say("ok souvik sir , i would always be here to help you")
             break
+
